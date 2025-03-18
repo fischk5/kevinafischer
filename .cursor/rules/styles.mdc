@@ -1,0 +1,10 @@
+---
+description: All styles
+globs: *.css
+alwaysApply: false
+---
+## Styling  
+  
+- All components have their specific styles from CSS modules defined in the same directory.  
+- All variables without exception will be defined in [globals.css](mdc:c:/Users/fisch/Documents/Projects/tetheros-consulting/client/src/styles/globals.css)  
+- Prioritize using existing global variables defined in [globals.css](mdc:c:/Users/fisch/Documents/Projects/tetheros-consulting/client/src/styles/globals.css) for color-based properties like color, background-color, border-color, etc. If an appropriate global variable does not exist, request permission to add a new one along with a justification for it. The user may grant this request for you to add a new global color variable with a unique name to the [globals.css](mdc:c:/Users/fisch/Documents/Projects/tetheros-consulting/client/src/styles/globals.css), or he may direct you to use a specific hex or rgba color instead.  

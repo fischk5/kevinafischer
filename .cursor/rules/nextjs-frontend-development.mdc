@@ -1,0 +1,29 @@
+---
+description: NextJS Frontend Development
+globs: *.tsx, *.ts,
+alwaysApply: false
+---
+## NextJS Specific Guidelines  
+
+- Follow Next.js App Router directory structure conventions  
+- Minimize usage of 'use client', useEffect, and useState when possible  
+- Abstract as much logic from the `page.tsx` files as possible into components for the App Router to work more effectively and move concerns away from the routing logic as much as possible. A noteworthy exception is that fetches to the /api should be handled by the `page.tsx` files with the results passed down to components to maintain a more efficient data flow and avoid tying data fetching with rendering operations.  
+
+
+## Component Styles  
+  
+- All components have their specific styles from CSS modules defined in the same directory.  
+- All variables without exception will be defined in [globals.css](mdc:c:/Users/fisch/Documents/Projects/tetheros-consulting/client/src/styles/globals.css)
+  
+## Performance Optimization  
+
+- Use Next.js Image component for optimized image loading
+
+## Library Usage  
+  
+- Handle all date operations and manipulations with date-fns package via the /utils/dateUtils.ts module unless it is simpler to use vanilla typescript
+
+## Types and Interfaces  
+  
+- Most components will have a Props interface defined in the component file.  
+- define and export most types from the /types directory with few exceptions

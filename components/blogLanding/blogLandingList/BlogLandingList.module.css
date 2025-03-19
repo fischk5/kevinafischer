@@ -25,6 +25,12 @@
     margin-top: 20px;
 }
 
+.blogLink {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
 .blogPostOuter {
     display: flex;
     align-items: center;

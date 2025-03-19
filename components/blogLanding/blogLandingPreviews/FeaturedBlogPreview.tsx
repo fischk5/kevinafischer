@@ -2,6 +2,7 @@ import styles from "./FeaturedBlogPreview.module.css"
 import { BlogPostData } from "@/types"
 import Image from "next/image"
 import { getFormattedBlogPostPublishDate } from "@/lib/dateManager"
+import Link from "next/link"
 
 interface FeaturedBlogPreviewProps {
     blogPostData: BlogPostData
@@ -10,21 +11,22 @@ interface FeaturedBlogPreviewProps {
 export default function FeaturedBlogPreview({ blogPostData } : FeaturedBlogPreviewProps ) {
     const title = blogPostData.fields.title
     return (
-        <div className={styles.container}>
-            <div className={styles.textContainer}>
-                <div className={styles.textContainerCentered}>
-                    <div className={styles.decorations}>
-                        <p>{getFormattedBlogPostPublishDate(blogPostData.fields.published)}</p>
-                        <span>#{blogPostData.fields.category.fields.name}</span>
+        <Link href={`/blogs/${blogPostData.fields.slug}`} className={styles.linkWrapper}>
+            <div className={styles.container}>
+                <div className={styles.textContainer}>
+                    <div className={styles.textContainerCentered}>
+                        <div className={styles.decorations}>
+                            <p>{getFormattedBlogPostPublishDate(blogPostData.fields.published)}</p>
+                            <span>#{blogPostData.fields.category.fields.name}</span>
+                        </div>
+                        <h3>{title}</h3>
+                        <p>{blogPostData.fields.subtitle}</p>
                     </div>
-                    <h3>{title}</h3>
-                    <p>{blogPostData.fields.subtitle}</p>
+                </div>
+                <div className={styles.imageContainer}>
+                    <Image src={`https:${blogPostData.fields.featuredImage.fields.file.url}`} alt={blogPostData.fields.featuredImage.fields.description} height={300} width={600} style={{width: "100%", height: "auto"}} />
                 </div>
             </div>
-            <div className={styles.imageContainer}>
-                <Image src={`https:${blogPostData.fields.featuredImage.fields.file.url}`} alt={blogPostData.fields.featuredImage.fields.description} height={300} width={600} style={{width: "100%", height: "auto"}} />
-            </div>
-            
-        </div>
+        </Link>
     )
 }

@@ -20,8 +20,26 @@
     font-weight: 500;
     padding: 5px 0;
     transition: color 0.2s ease;
+    position: relative;
+    padding-left: 12px;
 }
 
 .tableOfContents a:hover {
     color: var(--color-brand-primary);
+}
+
+.tableOfContents a.active {
+    font-weight: 600;
+    color: var(--color-brand-primary);
+}
+
+.tableOfContents a.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: var(--color-brand-primary);
+    border-radius: 2px;
 } 

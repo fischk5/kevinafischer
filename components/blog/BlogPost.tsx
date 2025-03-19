@@ -6,8 +6,8 @@ import Link from "next/link"
 import styles from "./BlogPost.module.css"
 import { getFormattedBlogPostPublishDate } from "@/lib/dateManager"
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
-import { BLOCKS, INLINES } from '@contentful/rich-text-types'
-import { useEffect, useState } from "react"
+import { BLOCKS, INLINES, Document } from '@contentful/rich-text-types'
+import { useEffect, useState, useCallback, useRef } from "react"
 import TableOfContents, { TocItem } from "./TableOfContents/TableOfContents"
 
 interface BlogPostProps {
@@ -25,8 +25,35 @@ export default function BlogPost({ blogPostData }: BlogPostProps) {
     } = blogPostData.fields
 
     const [tocItems, setTocItems] = useState<TocItem[]>([])
+    const [activeHeading, setActiveHeading] = useState<string>('')
+    const contentRef = useRef<HTMLDivElement>(null)
     
-    // Configure options for rich text rendering - making links open in new tabs
+    // Pre-process content to identify headings and build TOC items
+    useEffect(() => {
+        // Find all headings from the content
+        const headings: TocItem[] = []
+        
+        // Deep traversal function to find heading nodes
+        const extractHeadings = (node: any) => {
+            if (node.nodeType === 'heading-2' && node.content && node.content[0]?.value) {
+                const text = node.content[0].value
+                const id = `heading-${headings.length}`
+                headings.push({ id, text })
+            }
+            
+            if (node.content) {
+                node.content.forEach((child: any) => extractHeadings(child))
+            }
+        }
+        
+        if (content) {
+            content.content.forEach(node => extractHeadings(node))
+        }
+        
+        setTocItems(headings)
+    }, [content])
+    
+    // Configure options for rich text rendering
     const options = {
         renderNode: {
             [INLINES.HYPERLINK]: (node: any) => {
@@ -34,29 +61,55 @@ export default function BlogPost({ blogPostData }: BlogPostProps) {
                 const { uri } = data;
                 const text = content[0]?.value || '';
                 return `<a href="${uri}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+            },
+            [BLOCKS.HEADING_2]: (node: any) => {
+                const text = node.content[0]?.value || '';
+                const index = tocItems.findIndex(item => item.text === text);
+                const id = index >= 0 ? tocItems[index].id : `heading-fallback-${Math.random().toString(36).substr(2, 9)}`;
+                return `<h2 id="${id}">${text}</h2>`;
             }
         }
     };
     
+    // Generate the rendered HTML only after tocItems is ready
     const renderedContent = documentToHtmlString(content, options)
 
-    useEffect(() => {
-        // Extract h2 elements and generate IDs for them after content is rendered
-        const contentElement = document.querySelector(`.${styles.content}`)
-        if (contentElement) {
-            const h2Elements = contentElement.querySelectorAll('h2')
-            const items: TocItem[] = []
-            
-            h2Elements.forEach((h2, index) => {
-                const text = h2.textContent || ''
-                const id = `heading-${index}`
-                h2.id = id
-                items.push({ id, text })
-            })
-            
-            setTocItems(items)
+    // Function to scroll to a heading
+    const scrollToHeading = useCallback((id: string) => {
+        const element = document.getElementById(id)
+        if (element) {
+            // Add a small delay to ensure the DOM is ready
+            setTimeout(() => {
+                element.scrollIntoView({ behavior: 'smooth' })
+                setActiveHeading(id)
+            }, 50)
         }
-    }, [renderedContent])
+    }, [])
+
+    // Update active heading on scroll
+    useEffect(() => {
+        const handleScroll = () => {
+            if (tocItems.length === 0) return
+
+            const scrollPosition = window.scrollY + 150 // Offset for better UX
+            
+            // Check headings from bottom to top to find the one currently in view
+            for (let i = tocItems.length - 1; i >= 0; i--) {
+                const heading = document.getElementById(tocItems[i].id)
+                if (heading && heading.offsetTop <= scrollPosition) {
+                    setActiveHeading(tocItems[i].id)
+                    break
+                }
+            }
+        }
+        
+        window.addEventListener('scroll', handleScroll)
+        handleScroll() // Initial check
+        
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+    }, [tocItems])
 
     return (
         <div className={styles.container}>            
@@ -86,6 +139,7 @@ export default function BlogPost({ blogPostData }: BlogPostProps) {
                 </div>
                 
                 <div 
+                    ref={contentRef}
                     className={styles.content}
                     dangerouslySetInnerHTML={{ __html: renderedContent }}
                 />
@@ -123,7 +177,11 @@ export default function BlogPost({ blogPostData }: BlogPostProps) {
                 {tocItems.length > 0 && (
                     <div className={styles.sidebarSection}>
                         <h6 className={styles.sectionHeading}>CONTENTS</h6>
-                        <TableOfContents items={tocItems} />
+                        <TableOfContents 
+                            items={tocItems} 
+                            activeId={activeHeading}
+                            onItemClick={scrollToHeading}
+                        />
                     </div>
                 )}
             </div>

@@ -1,0 +1,27 @@
+.tableOfContents {
+    background-color: var(--color-light-bg);
+    border-radius: 8px;
+}
+
+.tableOfContents ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tableOfContents li {
+    margin-bottom: 4px;
+}
+
+.tableOfContents a {
+    color: var(--color-brand-primary);
+    text-decoration: none;
+    display: block;
+    font-weight: 500;
+    padding: 5px 0;
+    transition: color 0.2s ease;
+}
+
+.tableOfContents a:hover {
+    color: var(--color-brand-primary);
+} 

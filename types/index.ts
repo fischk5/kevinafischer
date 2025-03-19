@@ -19,9 +19,15 @@ export interface BlogPostData {
     };
     fields: {
         featuredImage: FeaturedImage;
+        category: {
+            fields: {
+                name: string
+            }
+        };
         published: string;
         slug: string;
         title: string;
-        content: Document
+        subtitle: string;
+        content: Document;
     }
 }

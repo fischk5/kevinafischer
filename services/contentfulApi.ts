@@ -6,6 +6,7 @@ export async function fetchBlogPosts() {
             content_type: "blogPost",
             select: [
                 'fields.title',
+                'fields.subtitle',
                 'fields.slug',
                 'fields.category',
                 'fields.featuredImage',

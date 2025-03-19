@@ -2,6 +2,7 @@
 
 import styles from "./BlogLanding.module.css"
 import { fetcher } from "@/lib/fetcher"
+import BlogLandingList from "./blogLandingList/BlogLandingList"
 import useSWR from "swr"
 import BasicLoader from "../loaders/BasicLoader"
 import FeaturedBlogPreview from "./blogLandingPreviews/FeaturedBlogPreview"
@@ -19,6 +20,7 @@ export default function BlogLanding() {
     return (
         <div className={styles.container}>
             <FeaturedBlogPreview blogPostData={data.entries[0]} />
+            <BlogLandingList blogPosts={data.entries} />
         </div>
     )
 }

@@ -13,9 +13,12 @@ export default function FeaturedBlogPreview({ blogPostData } : FeaturedBlogPrevi
         <div className={styles.container}>
             <div className={styles.textContainer}>
                 <div className={styles.textContainerCentered}>
-                    <p>{getFormattedBlogPostPublishDate(blogPostData.fields.published)}</p>
+                    <div className={styles.decorations}>
+                        <p>{getFormattedBlogPostPublishDate(blogPostData.fields.published)}</p>
+                        <span>#{blogPostData.fields.category.fields.name}</span>
+                    </div>
                     <h3>{title}</h3>
-                    <p>{blogPostData.fields.title}</p>
+                    <p>{blogPostData.fields.subtitle}</p>
                 </div>
             </div>
             <div className={styles.imageContainer}>

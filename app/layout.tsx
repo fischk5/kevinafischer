@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Rubik } from 'next/font/google'
+import { Open_Sans } from 'next/font/google'
 import "./globals.css";
 import Header from "@/components/header/Header";
 
@@ -8,11 +8,11 @@ export const metadata: Metadata = {
   description: "Founder, software engineer, and apsiring polymath",
 };
 
-const rubik = Rubik({
+const openSans = Open_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
   style: ["normal"],
-  variable: "--font-rubik",
+  variable: "--font-open-sans",
 });
 
 export default function RootLayout({
@@ -21,7 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={rubik.className}>
+    <html lang="en" className={openSans.className}>
       <body>
         <Header/>
         <div className="layout-content">

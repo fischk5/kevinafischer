@@ -1,0 +1,7 @@
+.container {
+    min-height: calc(100vh - var(--structural-header-height));
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+}

@@ -4,9 +4,7 @@ export default function Header() {
         <div className={styles.container}>
             <div className={styles.containerInner}>
                 <div className={styles.logo}>
-                    <span>KEVIN FISCHER</span>    
-                </div>
-                <div className={styles.navItems}>
+                    <span>Kevin Fischer</span>    
                 </div>
             </div>
         </div>

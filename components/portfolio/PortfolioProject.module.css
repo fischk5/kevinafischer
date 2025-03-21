@@ -1,0 +1,141 @@
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.title {
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 18px;
+    color: var(--color-grey);
+}
+
+.featuredImageContainer {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    margin-bottom: 40px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.featuredImage {
+    object-fit: cover;
+}
+
+.content {
+    padding: 20px 0;
+}
+
+.highlights {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: var(--color-white);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.highlights h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.highlights h3 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.linksSection, .featuredSection {
+    margin-bottom: 30px;
+}
+
+.linksList, .featuredList {
+    list-style: none;
+    padding: 0;
+}
+
+.linksList li, .featuredList li {
+    margin-bottom: 10px;
+}
+
+.linksList a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+.linksList a:hover {
+    text-decoration: underline;
+}
+
+.gallery {
+    margin-top: 40px;
+}
+
+.gallery h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.imagesGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.imageContainer {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.galleryImage {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+}
+
+.galleryImage:hover {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .imagesGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .title {
+        font-size: 28px;
+    }
+    
+    .featuredImageContainer {
+        height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .imagesGrid {
+        grid-template-columns: 1fr;
+    }
+    
+    .title {
+        font-size: 24px;
+    }
+    
+    .featuredImageContainer {
+        height: 250px;
+    }
+} 

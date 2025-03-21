@@ -21,7 +21,6 @@
     padding: 5px 0;
     transition: color 0.2s ease;
     position: relative;
-    padding-left: 12px;
 }
 
 .tableOfContents a:hover {

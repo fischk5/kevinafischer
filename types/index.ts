@@ -30,3 +30,22 @@ export interface BlogPostData {
         content: Document;
     }
 }
+
+export interface PortfolioProjectData {
+    sys: {
+        id: string;
+    };
+    fields: {
+        title: string;
+        key: string;
+        subtitle: string;
+        images: FeaturedImage[];
+        featuredImage: FeaturedImage;
+        highlights: {
+            links: { [key: string]: string };
+            featured: { [key: string]: string };
+            skills: string[];
+        };
+        mainContent: Document;
+    }
+}

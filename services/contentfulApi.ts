@@ -1,5 +1,5 @@
 import contentfulClient from "@/lib/contentfulClient"
-import { BlogPostData } from "@/types"
+import { BlogPostData, PortfolioProjectData } from "@/types"
 
 export async function fetchBlogPosts() {
     try {
@@ -24,18 +24,35 @@ export async function fetchBlogPosts() {
 }
 
 export async function fetchBlogPostBySlug(slug: string): Promise<{ blogPost: BlogPostData | null }> {
-    try {
-      const entryFetch = await contentfulClient.getEntries({
-        content_type: "blogPost",
-        'fields.slug': slug,
-        include: 2
-      });
-      
-      return { 
-        blogPost: entryFetch.items[0] ? entryFetch.items[0] as any as BlogPostData : null 
-      };
-    } catch (error) {
-      console.error('Error fetching blog post:', error);
-      return { blogPost: null };
-    }
+  try {
+    const entryFetch = await contentfulClient.getEntries({
+      content_type: "blogPost",
+      'fields.slug': slug,
+      include: 2
+    });
+    
+    return { 
+      blogPost: entryFetch.items[0] ? entryFetch.items[0] as any as BlogPostData : null 
+    };
+  } catch (error) {
+    console.error('Error fetching blog post:', error);
+    return { blogPost: null };
   }
+}
+
+export async function fetchPortfolioProjectByKey(key: string): Promise<{ portfolioProjectData: PortfolioProjectData | null }> {
+  try {
+    const entryFetch = await contentfulClient.getEntries({
+      content_type: "portfolioProject",
+      'fields.key': key,
+      include: 2
+    });
+    
+    return { 
+      portfolioProjectData: entryFetch.items[0] ? entryFetch.items[0] as any as PortfolioProjectData : null 
+    };
+  } catch (error) {
+    console.error('Error fetching portfolio project:', error);
+    return { portfolioProjectData: null };
+  }
+}

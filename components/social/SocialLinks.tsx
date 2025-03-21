@@ -29,7 +29,8 @@ export default function SocialLinks() {
     return (
         <section className={styles.socialSection}>
             <div className={styles.container}>
-                <h3>ON THE WEB</h3>
+                <div className={styles.titleBorder}></div>
+                <h3>@kevinalanfischer</h3>
                 <div className={styles.socialLinks}>
                     {socialLinks.map((social, index) => (
                         <Link 

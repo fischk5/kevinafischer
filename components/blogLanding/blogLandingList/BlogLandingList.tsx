@@ -10,6 +10,7 @@ interface BlogLandingListProps {
 export default function BlogLandingList({ blogPosts } : BlogLandingListProps ) {
     return (
         <div className={styles.container}>
+            <div className={styles.titleBorder}></div>
             <h3>everything</h3>
             <div className={styles.blogPosts}>
                 {blogPosts.map((blogPost: BlogPostData) => (

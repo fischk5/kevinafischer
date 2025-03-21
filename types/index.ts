@@ -46,6 +46,9 @@ export interface PortfolioProjectData {
             featured: { [key: string]: string };
             skills: string[];
         };
-        mainContent: Document;
+        overview: Document;
+        outcomes: Document;
+        credits: Document;
+        productDesign: Document;
     }
 }

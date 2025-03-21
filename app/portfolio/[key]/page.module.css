@@ -1,6 +1,8 @@
 .container {
-    padding: 20px;
     margin: 0 auto;
-    max-width: 1200px;
-    margin-top: 80px;
+    min-height: calc(100vh - var(--structural-header-height));
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
 } 

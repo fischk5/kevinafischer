@@ -63,13 +63,12 @@ export default function Header() {
                     </button>
                 </div>
 
-                {/* Mobile menu overlay */}
                 <div 
                     ref={menuRef}
                     className={`${styles.mobileMenu} ${mobileMenuOpen ? styles.open : ''}`}
                 >
                     <div className={styles.mobileMenuContent}>
-                        <Link href="/blog" onClick={toggleMenu}>Blog</Link>
+                        <Link href="/" onClick={toggleMenu}>Blog</Link>
                         <Link href="/portfolio" onClick={toggleMenu}>Portfolio</Link>
                     </div>
                 </div>

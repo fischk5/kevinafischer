@@ -1,6 +1,6 @@
 .socialSection {
-    margin-top: 120px;
-    margin-bottom: 120px;
+    margin-top: 40px;
+    margin-bottom: 60px;
 }
 
 .container {
@@ -12,12 +12,20 @@
     align-items: center;
 }
 
+.titleBorder {
+    height: 1px;
+    width: 100%;
+    max-width: 80px;
+    background-color: var(--color-grey);
+    margin: 0 auto;
+}
+
 .socialSection h3 {
     text-align: center;
     padding: 8px 0;
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 600;
-    letter-spacing: 2px;
+    letter-spacing: 4px;
     text-transform: uppercase;
     margin-bottom: 40px;
     color: var(--color-brand-primary);

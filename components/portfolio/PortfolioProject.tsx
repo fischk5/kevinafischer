@@ -1,8 +1,13 @@
 "use client"
 
 import Image from 'next/image'
+import Link from 'next/link'
 import styles from './PortfolioProject.module.css'
 import { PortfolioProjectData } from '@/types'
+import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
+import { BLOCKS, INLINES, Document } from '@contentful/rich-text-types'
+import { useState } from 'react'
+import PortfolioNavigationBar from './PortfolioNavigationBar'
 
 interface PortfolioProjectProps {
     portfolioProjectData: PortfolioProjectData
@@ -10,14 +15,49 @@ interface PortfolioProjectProps {
 
 export default function PortfolioProject({ portfolioProjectData }: PortfolioProjectProps) {
     const { fields } = portfolioProjectData;
+    const [view, setView] = useState('overview');
+    
+    const options = {
+        renderNode: {
+            [INLINES.HYPERLINK]: (node: any) => {
+                const { data, content } = node;
+                const { uri } = data;
+                const text = content[0]?.value || '';
+                return `<a href="${uri}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+            },
+            [BLOCKS.HEADING_2]: (node: any) => {
+                const text = node.content[0]?.value || '';
+                return `<h2 id="heading-${text.toLowerCase().replace(/\s+/g, '-')}">${text}</h2>`;
+            }
+        }
+    };
+    
+    const renderRichText = (document: Document | undefined) => {
+        if (!document) return '';
+        return documentToHtmlString(document, options);
+    };
     
     return (
         <div className={styles.container}>
+            <Link href="/portfolio" className={styles.backLink}>
+                <span className={styles.backArrow}>←</span> Portfolio
+            </Link>
+            
             <div className={styles.featuredContainer}>
                 <div className={styles.textContainer}>
                     <div className={styles.textContainerCentered}>
                         <h1 className={styles.title}>{fields.title}</h1>
                         <p className={styles.subtitle}>{fields.subtitle}</p>
+                        {fields.highlights?.links?.website && (
+                            <a 
+                                href={fields.highlights.links.website} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className={styles.visitButton}
+                            >
+                                Visit
+                            </a>
+                        )}
                     </div>
                 </div>
                 {fields.featuredImage && (
@@ -32,42 +72,50 @@ export default function PortfolioProject({ portfolioProjectData }: PortfolioProj
                 )}
             </div>
             
+            <PortfolioNavigationBar view={view} setView={setView} />
+            
             <div className={styles.content}>
-                {fields.highlights && (
-                    <div className={styles.highlights}>
-                        <h2>Highlights</h2>
-                        
-                        {fields.highlights.links && Object.keys(fields.highlights.links).length > 0 && (
-                            <div className={styles.linksSection}>
-                                <h3>Links</h3>
-                                <ul className={styles.linksList}>
-                                    {Object.entries(fields.highlights.links).map(([name, url]) => (
-                                        <li key={name}>
-                                            <a href={url} target="_blank" rel="noopener noreferrer">
-                                                {name}
-                                            </a>
-                                        </li>
-                                    ))}
-                                </ul>
+                {view === 'overview' && (
+                    <>                        
+                        {fields.overview && (
+                            <div className={styles.mainContent}>
+                                <div 
+                                    className={styles.richText}
+                                    dangerouslySetInnerHTML={{ __html: renderRichText(fields.overview) }}
+                                />
                             </div>
                         )}
-                        
-                        {fields.highlights.featured && Object.keys(fields.highlights.featured).length > 0 && (
-                            <div className={styles.featuredSection}>
-                                <h3>Featured</h3>
-                                <ul className={styles.featuredList}>
-                                    {Object.entries(fields.highlights.featured).map(([name, content]) => (
-                                        <li key={name}>
-                                            <strong>{name}:</strong> {content}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        )}
+                    </>
+                )}
+                
+                {view === 'product' && fields.productDesign && (
+                    <div className={styles.mainContent}>
+                        <div 
+                            className={styles.richText}
+                            dangerouslySetInnerHTML={{ __html: renderRichText(fields.productDesign) }}
+                        />
                     </div>
                 )}
                 
-                {fields.images && fields.images.length > 0 && (
+                {view === 'outcomes' && fields.outcomes && (
+                    <div className={styles.mainContent}>
+                        <div 
+                            className={styles.richText}
+                            dangerouslySetInnerHTML={{ __html: renderRichText(fields.outcomes) }}
+                        />
+                    </div>
+                )}
+                
+                {view === 'credits' && fields.credits && (
+                    <div className={styles.mainContent}>
+                        <div 
+                            className={styles.richText}
+                            dangerouslySetInnerHTML={{ __html: renderRichText(fields.credits) }}
+                        />
+                    </div>
+                )}
+                
+                {view === 'gallery' && fields.images && fields.images.length > 0 && (
                     <div className={styles.gallery}>
                         <h2>Gallery</h2>
                         <div className={styles.imagesGrid}>

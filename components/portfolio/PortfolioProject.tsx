@@ -10,25 +10,27 @@ interface PortfolioProjectProps {
 
 export default function PortfolioProject({ portfolioProjectData }: PortfolioProjectProps) {
     const { fields } = portfolioProjectData;
-    console.log(fields)
     
     return (
         <div className={styles.container}>
-            <div className={styles.header}>
-                <h1 className={styles.title}>{fields.title}</h1>
-                <p className={styles.subtitle}>{fields.subtitle}</p>
-            </div>
-            
-            {fields.featuredImage && (
-                <div className={styles.featuredImageContainer}>
-                    <Image 
-                        src={`https:${fields.featuredImage.fields.file.url}`}
-                        alt={fields.featuredImage.fields.title}
-                        fill
-                        className={styles.featuredImage}
-                    />
+            <div className={styles.featuredContainer}>
+                <div className={styles.textContainer}>
+                    <div className={styles.textContainerCentered}>
+                        <h1 className={styles.title}>{fields.title}</h1>
+                        <p className={styles.subtitle}>{fields.subtitle}</p>
+                    </div>
                 </div>
-            )}
+                {fields.featuredImage && (
+                    <div className={styles.imageContainer}>
+                        <Image 
+                            src={`https:${fields.featuredImage.fields.file.url}`}
+                            alt={fields.featuredImage.fields.title}
+                            fill
+                            className={styles.featuredImage}
+                        />
+                    </div>
+                )}
+            </div>
             
             <div className={styles.content}>
                 {fields.highlights && (
@@ -70,12 +72,12 @@ export default function PortfolioProject({ portfolioProjectData }: PortfolioProj
                         <h2>Gallery</h2>
                         <div className={styles.imagesGrid}>
                             {fields.images.map((imageData, index) => (
-                                <div key={index} className={styles.featuredImageContainer}>
+                                <div key={index} className={styles.galleryImageContainer}>
                                     <Image 
                                         src={`https:${imageData.fields.file.url}`}
                                         alt={imageData.fields.title}
                                         fill
-                                        className={styles.featuredImage}
+                                        className={styles.galleryImage}
                                     />
                                 </div>
                             ))}

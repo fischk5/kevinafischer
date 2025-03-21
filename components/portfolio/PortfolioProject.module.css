@@ -4,29 +4,70 @@
     margin: 0 auto;
 }
 
-.header {
-    margin-bottom: 40px;
-    text-align: center;
+/* Featured container styling similar to FeaturedBlogPreview */
+.featuredContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 0;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    --featured-container-height: 320px;
+    transition: all 0.2s ease-in-out;
+    overflow: hidden;
+    border-radius: 6px;
+}
+
+.featuredContainer:hover {
+    box-shadow: rgba(50, 50, 93, 0.3) 0px 12px 24px -2px, rgba(0, 0, 0, 0.4) 0px 6px 14px -3px;
+}
+
+.textContainer {
+    flex-basis: 50%;
+    height: 100%;
+    min-height: var(--featured-container-height);
+    display: flex;
+    align-items: center;
+}
+
+.imageContainer {
+    flex-basis: 50%;
+    display: flex;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    min-height: var(--featured-container-height);
+}
+
+.imageContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.textContainerCentered {
+    width: 85%;
+    margin: 0 auto;
 }
 
 .title {
-    font-size: 36px;
+    font-size: 24px;
     font-weight: 600;
-    margin-bottom: 10px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .subtitle {
-    font-size: 18px;
+    margin: 0;
     color: var(--color-grey);
-}
-
-.featuredImageContainer {
-    position: relative;
-    width: 100%;
-    height: 400px;
-    margin-bottom: 40px;
-    border-radius: 8px;
-    overflow: hidden;
+    font-size: 14px;
 }
 
 .featuredImage {
@@ -35,6 +76,8 @@
 
 .content {
     padding: 20px 0;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 .highlights {
@@ -95,16 +138,17 @@
     gap: 20px;
 }
 
-.imageContainer {
+.galleryImageContainer {
     position: relative;
+    width: 100%;
+    height: 200px;
     border-radius: 8px;
     overflow: hidden;
+    margin-bottom: 20px;
 }
 
 .galleryImage {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
+    object-fit: cover;
     transition: transform 0.3s ease;
 }
 
@@ -112,17 +156,43 @@
     transform: scale(1.05);
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 840px) {
+    .featuredContainer {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: stretch;
+        justify-content: center;
+        width: 95%;
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0;
+        --featured-container-height: 140px;
+    }
+
+    .featuredContainer:hover {
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    }
+
+    .title {
+        font-size: 18px;
+        margin-top: 4px;
+        margin-bottom: 4px;
+    }
+
+    .imageContainer {
+        max-height: 180px;
+    }
+
+    .textContainer {
+        padding: 15px 0;
+    }
+
     .imagesGrid {
         grid-template-columns: repeat(2, 1fr);
     }
     
-    .title {
-        font-size: 28px;
-    }
-    
-    .featuredImageContainer {
-        height: 300px;
+    .galleryImageContainer {
+        height: 160px;
     }
 }
 
@@ -132,10 +202,10 @@
     }
     
     .title {
-        font-size: 24px;
+        font-size: 16px;
     }
     
-    .featuredImageContainer {
-        height: 250px;
+    .galleryImageContainer {
+        height: 140px;
     }
 } 

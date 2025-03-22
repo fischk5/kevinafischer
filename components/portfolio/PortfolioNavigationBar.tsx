@@ -9,9 +9,9 @@ export default function PortfolioNavigationBar({ view, setView }: PortfolioNavig
     const navigationItems = [
         { id: 'overview', label: 'Overview' },
         { id: 'product', label: 'Product' },
-        { id: 'outcomes', label: 'Outcomes' },
+        // { id: 'outcomes', label: 'Outcomes' },
         { id: 'gallery', label: 'Gallery' },
-        { id: 'credits', label: 'Credits' }
+        { id: 'credits', label: 'Team' }
     ];
 
     return (

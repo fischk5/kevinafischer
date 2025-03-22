@@ -6,7 +6,9 @@ import styles from './PortfolioProject.module.css'
 import { PortfolioProjectData } from '@/types'
 import { documentToHtmlString } from '@contentful/rich-text-html-renderer'
 import { BLOCKS, INLINES, Document } from '@contentful/rich-text-types'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { IoClose } from 'react-icons/io5'
+import { IoChevronForward, IoChevronBack } from 'react-icons/io5'
 import PortfolioNavigationBar from './PortfolioNavigationBar'
 
 interface PortfolioProjectProps {
@@ -16,6 +18,68 @@ interface PortfolioProjectProps {
 export default function PortfolioProject({ portfolioProjectData }: PortfolioProjectProps) {
     const { fields } = portfolioProjectData;
     const [view, setView] = useState('overview');
+    const [showGalleryModal, setShowGalleryModal] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    
+    // Handle ESC key to close modal
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (!showGalleryModal) return;
+            
+            if (event.key === 'Escape') {
+                setShowGalleryModal(false);
+            } else if (event.key === 'ArrowRight' && fields.images && fields.images.length > 0) {
+                setCurrentImageIndex((prevIndex) => 
+                    prevIndex === fields.images.length - 1 ? 0 : prevIndex + 1
+                );
+            } else if (event.key === 'ArrowLeft' && fields.images && fields.images.length > 0) {
+                setCurrentImageIndex((prevIndex) => 
+                    prevIndex === 0 ? fields.images.length - 1 : prevIndex - 1
+                );
+            }
+        };
+        
+        window.addEventListener('keydown', handleKeyDown);
+        
+        // Prevent body scrolling when modal is open
+        if (showGalleryModal) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = '';
+        }
+        
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = '';
+        };
+    }, [showGalleryModal, fields.images, currentImageIndex]);
+    
+    const openGallery = (index: number) => {
+        setCurrentImageIndex(index);
+        setShowGalleryModal(true);
+    };
+    
+    const closeGallery = () => {
+        setShowGalleryModal(false);
+    };
+    
+    const nextImage = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (fields.images && fields.images.length > 0) {
+            setCurrentImageIndex((prevIndex) => 
+                prevIndex === fields.images.length - 1 ? 0 : prevIndex + 1
+            );
+        }
+    };
+    
+    const prevImage = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (fields.images && fields.images.length > 0) {
+            setCurrentImageIndex((prevIndex) => 
+                prevIndex === 0 ? fields.images.length - 1 : prevIndex - 1
+            );
+        }
+    };
     
     const options = {
         renderNode: {
@@ -28,6 +92,33 @@ export default function PortfolioProject({ portfolioProjectData }: PortfolioProj
             [BLOCKS.HEADING_2]: (node: any) => {
                 const text = node.content[0]?.value || '';
                 return `<h2 id="heading-${text.toLowerCase().replace(/\s+/g, '-')}">${text}</h2>`;
+            },
+            ['embedded-asset-block']: (node: any) => {
+                const { data } = node;
+                if (!data || !data.target || !data.target.fields) {
+                    return '';
+                }
+                
+                const { title, description, file } = data.target.fields;
+                if (!file || !file.url) {
+                    return '';
+                }
+                
+                const imageUrl = `https:${file.url}`;
+                const alt = description || title || 'Embedded image';
+                
+                return `
+                    <div class="${styles.embeddedAsset}">
+                        <a href="${imageUrl}" target="_blank" rel="noopener noreferrer">
+                            <img 
+                                src="${imageUrl}" 
+                                alt="${alt}" 
+                                class="${styles.embeddedImage}"
+                            />
+                        </a>
+                        ${description ? `<p class="${styles.imageCaption}">${description}</p>` : ''}
+                    </div>
+                `;
             }
         }
     };
@@ -120,7 +211,11 @@ export default function PortfolioProject({ portfolioProjectData }: PortfolioProj
                         <h2>Gallery</h2>
                         <div className={styles.imagesGrid}>
                             {fields.images.map((imageData, index) => (
-                                <div key={index} className={styles.galleryImageContainer}>
+                                <div 
+                                    key={index} 
+                                    className={styles.galleryImageContainer}
+                                    onClick={() => openGallery(index)}
+                                >
                                     <Image 
                                         src={`https:${imageData.fields.file.url}`}
                                         alt={imageData.fields.title}
@@ -129,6 +224,47 @@ export default function PortfolioProject({ portfolioProjectData }: PortfolioProj
                                     />
                                 </div>
                             ))}
+                        </div>
+                    </div>
+                )}
+                
+                {/* Image Gallery Modal */}
+                {showGalleryModal && fields.images && fields.images.length > 0 && (
+                    <div className={styles.galleryModal} onClick={closeGallery}>
+                        <div className={styles.galleryModalContent} onClick={(e) => e.stopPropagation()}>
+                            <button className={styles.closeButton} onClick={closeGallery}>
+                                <IoClose size={24} />
+                            </button>
+                            
+                            <div className={styles.galleryImageNav}>
+                                <button className={styles.navButton} onClick={prevImage}>
+                                    <IoChevronBack size={24} />
+                                </button>
+                                
+                                <div className={styles.galleryModalImageContainer}>
+                                    <h3 className={styles.galleryModalTitle}>
+                                        {fields.images[currentImageIndex].fields.title}
+                                    </h3>
+                                    <img 
+                                        src={`https:${fields.images[currentImageIndex].fields.file.url}`}
+                                        alt={fields.images[currentImageIndex].fields.title}
+                                        className={styles.galleryModalImage}
+                                    />
+                                    {fields.images[currentImageIndex].fields.description && (
+                                        <p className={styles.galleryModalDescription}>
+                                            {fields.images[currentImageIndex].fields.description}
+                                        </p>
+                                    )}
+                                </div>
+                                
+                                <button className={styles.navButton} onClick={nextImage}>
+                                    <IoChevronForward size={24} />
+                                </button>
+                            </div>
+                            
+                            <div className={styles.galleryCounter}>
+                                {currentImageIndex + 1} / {fields.images.length}
+                            </div>
                         </div>
                     </div>
                 )}

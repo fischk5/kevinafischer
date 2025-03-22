@@ -35,11 +35,5 @@ export const portfolioProjects: PortfolioProject[] = [
         description: "Stay organized and productive",
         key: "horrrorverse",
         image_url: "https://storage.googleapis.com/kevinafischer_public/kevinafischer/kaf_landing_horrrorverse.png"
-    },
-    {
-        project_name: "Comment Pilgrim",
-        description: "Your travel companion",
-        key: "comment-pilgrim",
-        image_url: "https://storage.googleapis.com/kevinafischer_public/kevinafischer/kaf_landing_thumbnail_commentpilgrim.png"
     }
 ]; 
